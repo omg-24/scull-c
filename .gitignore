@@ -1,0 +1,20 @@
+# Ignore all Kbuild/GCC build artefacts
+*.ko
+*.o
+*.mod
+*.mod.c
+*.mod.o
+*.cmd
+*.symvers
+modules.order
+Module.symvers
+.tmp_versions/
+.cache.mk
+
+# Compiled userspace test
+test_scull
+
+# Editor temporaries
+*.swp
+*~
+.DS_Store
