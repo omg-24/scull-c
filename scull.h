@@ -4,7 +4,6 @@
  *
  * SCULL: Simple Character Utility for Loading and Unloading
  * Based on the design from "Linux Device Drivers" (Rubini, Corbet, Kroah-Hartman)
- * and the Rust reference implementation at github.com/Anas-github-acc/rust_scull
  *
  * This header is shared by the kernel driver (scull.c) and the
  * userspace test program (test_scull.c).  The ioctl definitions are

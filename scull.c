@@ -4,10 +4,8 @@
  *
  * SCULL: Simple Character Utility for Loading and Unloading
  *
- * This is a faithful C port of the SCULL driver described in
- * "Linux Device Drivers" (3rd ed.) by Rubini, Corbet, & Kroah-Hartman,
- * and informed by the Rust reference implementation at:
- *   https://github.com/Anas-github-acc/rust_scull
+ * This implements the SCULL design described in "Linux Device Drivers"
+ * (3rd ed.) by Rubini, Corbet, & Kroah-Hartman.
  *
  * The driver exposes a single character device (/dev/scull) backed by a
  * sparse, dynamically-allocated memory model:
@@ -46,7 +44,6 @@
 /* MODULE METADATA                                                             */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-MODULE_AUTHOR("C port based on Anas-github-acc/rust_scull & LDD3");
 MODULE_DESCRIPTION("SCULL simple character device driver (C implementation)");
 MODULE_LICENSE("GPL v2");
 MODULE_VERSION("1.0.0");

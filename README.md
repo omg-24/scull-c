@@ -1,7 +1,6 @@
 # SCULL — Simple Character Utility for Loading and Unloading (C Implementation)
 
-> A complete, educational Linux kernel character device driver written in C.  
-> C port of the Rust reference implementation at [Anas-github-acc/rust_scull](https://github.com/Anas-github-acc/rust_scull), itself based on the classic SCULL example from *Linux Device Drivers* (3rd ed.) by Rubini, Corbet & Kroah-Hartman.
+> A Linux kernel character device driver written in C, implementing the SCULL-style memory-backed device described in *Linux Device Drivers* (3rd ed.) by Rubini, Corbet & Kroah-Hartman.
 
 ---
 
@@ -23,7 +22,6 @@
 14. [Troubleshooting](#14-troubleshooting)
 15. [Limitations and Safety Notes](#15-limitations-and-safety-notes)
 16. [Project Directory Structure](#16-project-directory-structure)
-17. [Feature Mapping: Rust → C](#17-feature-mapping-rust--c)
 
 ---
 
@@ -47,7 +45,7 @@ No hardware is required. The driver runs entirely in RAM.
 | Goal | Status |
 |------|--------|
 | Genuine `.ko` kernel module (not FUSE/userspace simulation) | ✅ |
-| C implementation, no Rust/Cargo dependency | ✅ |
+| Linux kernel module and userspace test program written in C | ✅ |
 | Dynamic major number allocation | ✅ |
 | Automatic `/dev/scull` via udev/devtmpfs | ✅ |
 | Sparse quantum/qset memory model | ✅ |
@@ -547,24 +545,3 @@ scull-c/
 ```
 
 ---
-
-## 17. Feature Mapping: Rust → C
-
-| Rust (rust_scull) | C (scull-c) | Notes |
-|-------------------|-------------|-------|
-| `module! { type: ScullModule }` | `module_init` / `module_exit` macros | Standard C kernel module entry points |
-| `MiscDevice` / `MiscDeviceRegistration` | `cdev` + `alloc_chrdev_region` + `class_create` | Full control over major/minor; misc gives fixed major 10 |
-| `KBox<ScullQset>` | `kzalloc(sizeof(struct scull_qset))` | Heap allocation; C uses explicit free |
-| `KVec<Option<Quantum>>` | `kcalloc(qset, sizeof(void*))` | Pointer array; NULL = unallocated hole |
-| `Mutex<ScullDevData>` | `struct mutex` + `mutex_lock_interruptible` | Same semantics |
-| `trim()` method | `scull_trim()` function | Identical algorithm |
-| `follow()` method | `scull_follow()` function | Identical walk logic |
-| Rust `?` error propagation | `goto fail_*` error ladder | C idiom for cleanup on failure |
-| `copy_to_user` / `copy_from_user` | Same functions (kernel C API) | Identical — Rust bindings wrap them |
-| `IovIterDest` / `IovIterSource` | Direct pointer + count | Simplified (no vectored I/O) |
-| `module_param` (not in Rust version) | `module_param(quantum, int, 0444)` | Added: allows runtime tuning |
-| `pr_info!` / `pr_debug!` | `pr_info()` / `pr_debug()` | Same log levels |
-
----
-
-*Built for OS coursework — Ubuntu VM, kernel 5.15/6.x, GCC, no Rust required.*
